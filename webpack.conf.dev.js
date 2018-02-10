@@ -98,6 +98,11 @@ module.exports = {
                     'sass-loader'
                 ]
             },
+            // css
+            {
+                test: /\.css$/,
+                use: ['style-loader', 'css-loader']
+            },
             // svg
             {
                 test: /\.svg$/,

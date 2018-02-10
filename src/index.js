@@ -1,4 +1,4 @@
-import Markdown from './components/Markdown';
+import Markdown from './components/Markdown.vue';
 
 Markdown.install = Vue => {
     // 引入svg

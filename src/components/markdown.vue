@@ -114,10 +114,10 @@
 </template>
 
 <script>
-    import SvgIcon from './svg-icon'
+    import 'highlight.js/styles/tomorrow.css';
+    import SvgIcon from './svg-icon.vue'
     import marked from 'marked'
     import highlight from 'highlight.js';
-    import fetchUpload from '../utils/upload';
 
     marked.setOptions({
         breaks: true,
@@ -361,9 +361,16 @@
                 let files = [...e.target.files];
                 let form = new FormData();
                 form.append(this.uploadFieldName, files[0]);
-                fetchUpload(this.uploadUrl, {
-                    headers: this.uploadHeaders,
+                let headers = Object.prototype.toString.call(this.uploadHeaders) === '[object Object]' ? this.uploadHeaders : {};
+                let req = new Request(this.uploadUrl, {
+                    method: 'POST',
+                    headers: new Headers(headers),
                     body: form
+                });
+                fetch(req).then(res => {
+                    if (res.ok) {
+                        return res.json();
+                    }
                 }).then(({data}) => {
                     if (data) {
                         this.imgUrl = data;
@@ -373,6 +380,8 @@
                     } else {
                         this.hideUploadImg();
                     }
+                }).catch(err => {
+                    this.hideUploadImg();
                 });
             },
             // 隐藏所有
@@ -391,7 +400,6 @@
 <style lang="scss" type="text/scss">
     @import '../scss/variables';
     @import '../scss/md.scss';
-    @import "../../node_modules/highlight.js/styles/tomorrow.css";
 
     $height-tools: 40px;
 
