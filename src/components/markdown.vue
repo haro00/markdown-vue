@@ -114,7 +114,6 @@
 </template>
 
 <script>
-    import 'highlight.js/styles/tomorrow.css';
     import SvgIcon from './svg-icon.vue'
     import marked from 'marked'
     import highlight from 'highlight.js';
