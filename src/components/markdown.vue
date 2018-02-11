@@ -86,7 +86,7 @@
             <div class="md-edit" v-show="isShowEdit">
                 <textarea
                     class="md-edit-box"
-                    v-model="text"
+                    :value="value"
                     ref="text"
                     @input="inputText"
                     @keydown="handleKey"
@@ -177,7 +177,7 @@
         computed: {
             // 预览html内容
             html() {
-                return marked(this.text);
+                return marked(this.value);
             },
         },
         mounted() {
@@ -187,8 +187,7 @@
         methods: {
             // 将输入的值传回父组件
             inputText() {
-                this.text = this.textDom.value;
-                this.$emit('input', this.text);
+                this.$emit('input', this.textDom.value);
                 this.$emit('html', this.html);
             },
             // 获取光标的位置
@@ -246,13 +245,13 @@
                     position = this.getCursorPosition();
                     cursorPosition = position + before.length;
                 } else {
-                    let {start, end} = this.getLineByCursor(this.text, this.getCursorPosition());
-                    originStr = this.text.slice(start, end);
+                    let {start, end} = this.getLineByCursor(this.value, this.getCursorPosition());
+                    originStr = this.value.slice(start, end);
                     position = start;
                     cursorPosition = end + before.length + after.length;
                 }
                 let replaceStr = `${before}${originStr}${after}`;
-                this.textDom.value = this.replace(this.text, position, originStr, replaceStr);
+                this.textDom.value = this.replace(this.value, position, originStr, replaceStr);
                 this.textDom.selectionStart = cursorPosition;
                 this.textDom.selectionEnd = cursorPosition;
                 this.inputText();
@@ -265,21 +264,21 @@
             // 获取键盘事件的文本
             handleKeyText(before = '', after = '', isExg = false) {
                 if (this.getSelectionText()) {
-                    let {start} = this.getLineByCursor(this.text, this.textDom.selectionStart);
-                    let {end} = this.getLineByCursor(this.text, this.textDom.selectionEnd);
-                    let selectionStr = this.text.slice(start, end);
+                    let {start} = this.getLineByCursor(this.value, this.textDom.selectionStart);
+                    let {end} = this.getLineByCursor(this.value, this.textDom.selectionEnd);
+                    let selectionStr = this.value.slice(start, end);
                     let replaceArr = selectionStr.split('\n').map(item => isExg ? item.replace(before, after) : `${before}${item}${after}`);
-                    this.textDom.value = this.replace(this.text, start, selectionStr, replaceArr.join('\n'));
+                    this.textDom.value = this.replace(this.value, start, selectionStr, replaceArr.join('\n'));
                     let cursorPosition = isExg ? start : end + before.length * replaceArr.length + after.length * replaceArr.length;
                     this.textDom.selectionStart = cursorPosition;
                     this.textDom.selectionEnd = cursorPosition;
                     this.inputText();
                     return false;
                 }
-                let {start, end} = this.getLineByCursor(this.text, this.getCursorPosition());
-                let originStr = this.text.slice(start, end);
+                let {start, end} = this.getLineByCursor(this.value, this.getCursorPosition());
+                let originStr = this.value.slice(start, end);
                 let replaceStr = isExg ? originStr.replace(before, after) : `${before}${originStr}${after}`;
-                this.textDom.value = this.replace(this.text, start, originStr, replaceStr);
+                this.textDom.value = this.replace(this.value, start, originStr, replaceStr);
                 let cursorPosition = isExg ? start : end + before.length + after.length;
                 this.textDom.selectionStart = cursorPosition;
                 this.textDom.selectionEnd = cursorPosition;
