@@ -91,6 +91,6 @@ npm install
 npm run dev
 ```
 
-### MIT
+### LICENSE
 
 [MIT](https://github.com/haro00/markdown-vue/blob/master/LICENSE)

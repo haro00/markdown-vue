@@ -398,7 +398,7 @@
 
 <style lang="scss" type="text/scss">
     @import '../scss/variables';
-    @import '../scss/md.scss';
+    @import '../scss/md';
 
     $height-tools: 40px;
 
